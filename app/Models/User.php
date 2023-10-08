@@ -19,7 +19,8 @@ class User extends Authenticatable
      */
     protected $fillable = [
         'name',
-        'email',
+        'surname',
+        'login',
         'password',
     ];
 
@@ -30,16 +31,43 @@ class User extends Authenticatable
      */
     protected $hidden = [
         'password',
-        'remember_token',
     ];
 
     /**
-     * The attributes that should be cast.
-     *
-     * @var array<string, string>
+     * Model relationships
      */
-    protected $casts = [
-        'email_verified_at' => 'datetime',
-        'password' => 'hashed',
-    ];
+    public function posts()
+    {
+        return $this->hasMany(Post::class);
+    }
+
+    public function created_communities()
+    {
+        return $this->hasMany(Community::class);
+    }
+
+    public function editable_communities()
+    {
+        return $this->hasMany(CommunityEditor::class);
+    }
+
+    public function comments()
+    {
+        return $this->hasMany(Comment::class);
+    }
+
+    public function reactions()
+    {
+        return $this->hasMany(SetReaction::class);
+    }
+
+    public function albums()
+    {
+        return $this->hasMany(Album::class);
+    }
+
+    public function subscriptions()
+    {
+        return $this->belongsToMany(Community::class)->withPivot('subscription_status_id', 'message');
+    }
 }
