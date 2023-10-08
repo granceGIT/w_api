@@ -22,6 +22,8 @@ class User extends Authenticatable
         'surname',
         'login',
         'password',
+        'api_token',
+        'last_active_time',
     ];
 
     /**
@@ -32,6 +34,15 @@ class User extends Authenticatable
     protected $hidden = [
         'password',
     ];
+
+    public function generateToken()
+    {
+        if (!$this->api_token) {
+            $token = $this->createToken("user")->plainTextToken;
+            $this->update(['api_token' => $token]);
+        }
+        return $this->api_token;
+    }
 
     /**
      * Model relationships
