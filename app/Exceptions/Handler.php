@@ -36,7 +36,7 @@ class Handler extends ExceptionHandler
         // Validation exceptions
         $this->renderable(function (ValidationException $e, Request $request) {
             if ($request->is('api/*')) {
-                return ApiResponse::error($e->status, "Validation error", $e->errors());
+                return ApiResponse::error($e->status, "Ошибка валидации", $e->errors());
             }
         });
 

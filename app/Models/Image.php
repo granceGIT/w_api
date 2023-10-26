@@ -9,6 +9,12 @@ class Image extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'image_id',
+        'album_id',
+        'alt',
+    ];
+
     /**
      * Model relationships
      */

@@ -6,6 +6,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Facades\Hash;
 use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
@@ -21,6 +22,13 @@ class User extends Authenticatable
         'name',
         'surname',
         'login',
+        'education',
+        'job',
+        'country',
+        'city',
+        'birthdate',
+        'status',
+        'image',
         'password',
         'api_token',
         'last_active_time',
@@ -33,7 +41,13 @@ class User extends Authenticatable
      */
     protected $hidden = [
         'password',
+        'api_token',
     ];
+
+    public function setPasswordAttribute($value)
+    {
+        $this->attributes['password'] = Hash::make($value);
+    }
 
     public function generateToken()
     {
@@ -42,6 +56,23 @@ class User extends Authenticatable
             $this->update(['api_token' => $token]);
         }
         return $this->api_token;
+    }
+
+    public function resetToken()
+    {
+        if ($this->update(['api_token' => null])) {
+            $this->tokens()->delete();
+        }
+    }
+
+    public function friendshipExists($user_id)
+    {
+        $user = $this;
+        return Friendship::where(function ($query) use ($user_id, $user) {
+            $query->where('sender_id', $user->id)->where('recipient_id', $user_id);
+        })->orWhere(function ($query) use ($user_id, $user) {
+            $query->where('sender_id', $user_id)->where('recipient_id', $user->id);
+        })->first();
     }
 
     /**

@@ -9,12 +9,12 @@ class SetReaction extends Model
 {
     use HasFactory;
 
-//    protected $fillable = [
-//        'user_id',
-//        'reaction_id',
-//        'reactionable_id',
-//        'reactionable_type',
-//    ];
+    protected $fillable = [
+        'user_id',
+        'reaction_id',
+    ];
+
+    public $timestamps = false;
 
     /**
      * Model relationships

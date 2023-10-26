@@ -15,6 +15,11 @@ class Post extends Model
         'content',
     ];
 
+    public function reactionExists($user_id, $reaction_id)
+    {
+        return $this->reactions()->where('user_id', $user_id)->where('reaction_id', $reaction_id)->first();
+    }
+
     /**
      * Model relationships
      */
