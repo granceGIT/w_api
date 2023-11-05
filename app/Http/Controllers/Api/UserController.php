@@ -32,7 +32,6 @@ class UserController extends Controller
     public function register(RegisterRequest $request)
     {
         $user = User::create([
-                'password' => Hash::make($request->password),
                 'last_active_time' => now(),
             ] + $request->validated());
         return ApiResponse::json(201, $user);

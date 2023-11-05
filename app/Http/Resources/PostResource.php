@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Models\Post;
 use App\Models\Reaction;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -22,8 +23,7 @@ class PostResource extends JsonResource
             'community' => $this->whenHas('community'),
             'content' => $this->content,
             'created_at' => $this->created_at,
-            'set_reactions' => $this->reactions,
-            'reactions' => ReactionResource::collection(Reaction::all()),
+            'reactions' => ReactionResource::collection(Reaction::withSetReactions($this->id, Post::class)->get()),
         ];
     }
 }

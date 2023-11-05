@@ -19,6 +19,11 @@ class PostController extends Controller
         return PostResource::collection(Post::orderBy('created_at', 'desc')->get());
     }
 
+    public function show(Post $post)
+    {
+        return new PostResource($post);
+    }
+
     public function userPosts(User $user)
     {
         return PostResource::collection($user->posts()->orderBy('created_at', 'desc')->get());
