@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\ApiResponse;
 use App\Http\Controllers\Controller;
+use App\Http\FileManager;
 use App\Http\Requests\User\AddFriendRequest;
 use App\Http\Requests\User\LoginRequest;
 use App\Http\Requests\User\RegisterRequest;
@@ -21,9 +22,10 @@ class UserController extends Controller
     public function login(LoginRequest $request)
     {
         if (Auth::attempt($request->validated())) {
+            $user = $request->user();
             return ApiResponse::json(200, [
-                "user" => $request->user(),
-                "token" => $request->user()->generateToken(),
+                "user" => new UserResource($user),
+                "token" => $user->generateToken(),
             ]);
         }
         return ApiResponse::error(401, "Неверные данные");
@@ -47,7 +49,7 @@ class UserController extends Controller
 
     public function profile(Request $request)
     {
-        return ApiResponse::json(200, $request->user());
+        return new UserResource($request->user());
     }
 
     public function find(User $user)
@@ -59,11 +61,11 @@ class UserController extends Controller
     {
         $user = $request->user();
         if (Hash::check($request->password, $user->password)) {
-            if ($request->new_password) {
-                $request['password'] = $request->new_password;
-            }
-            $user->update($request->all());
-            return ApiResponse::json(200, $user);
+            $validated = $request->validated();
+            if ($request->image) $validated['image'] = $user->uploadImage($request->image);
+            if ($request->new_password) $validated['password'] = $request->new_password;
+            $user->update($validated);
+            return new UserResource($user);
         }
         return ApiResponse::error(400, "Неверный пароль");
 
@@ -73,6 +75,7 @@ class UserController extends Controller
     {
         $user = $request->user();
         $friendship = $user->friendshipExists($request->user_id);
+        // TODO: нужно переделать
         if ($friendship) {
             $message = match ($friendship->friendship_status_id) {
                 1 => "Заявка уже отправлена",

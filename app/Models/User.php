@@ -3,6 +3,7 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Http\FileManager;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -44,9 +45,16 @@ class User extends Authenticatable
         'api_token',
     ];
 
+    protected $imagesPath = '/uploads/avatars';
+
     public function setPasswordAttribute($value)
     {
         $this->attributes['password'] = Hash::make($value);
+    }
+
+    public function getFullImagePath()
+    {
+        return env('APP_URL') . env('BASE_STORAGE_PATH') . $this->imagesPath . '/' . $this->image;
     }
 
     public function generateToken()
@@ -63,6 +71,12 @@ class User extends Authenticatable
         if ($this->update(['api_token' => null])) {
             $this->tokens()->delete();
         }
+    }
+
+    public function uploadImage($image)
+    {
+        if ($this->image) return FileManager::update($this->image, $image, $this->imagesPath);
+        return FileManager::upload($image, $this->imagesPath);
     }
 
     public function friendshipExists($user_id)

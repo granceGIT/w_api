@@ -19,7 +19,7 @@ class UserResource extends JsonResource
             'name' => $this->name,
             'surname' => $this->surname,
             'birthdate' => $this->birthdate,
-            'image' => $this->image,
+            'image' => $this->image ? $this->getFullImagePath() : $this->image,
             'status' => $this->status,
             'job' => $this->job,
             'education' => $this->education,

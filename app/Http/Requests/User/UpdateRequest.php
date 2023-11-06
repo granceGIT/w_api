@@ -18,7 +18,7 @@ class UpdateRequest extends FormRequest
             'education' => ['nullable', 'string'],
             'country' => ['nullable', 'string'],
             'city' => ['nullable', 'string'],
-            'new_password' => ['sometimes', 'min:5', 'string'],
+            'new_password' => ['nullable', 'min:5', 'string'],
             'password' => ['required', 'string'],
         ];
     }
