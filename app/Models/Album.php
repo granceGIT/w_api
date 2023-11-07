@@ -13,6 +13,7 @@ class Album extends Model
         'name',
         'user_id',
         'community_id',
+        'is_primary',
     ];
 
 
@@ -36,6 +37,6 @@ class Album extends Model
 
     public function images()
     {
-        return $this->morphMany('App\Models\Image', 'imageable');
+        return $this->morphMany(Image::class, 'imageable');
     }
 }

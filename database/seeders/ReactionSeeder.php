@@ -13,31 +13,34 @@ class ReactionSeeder extends Seeder
      */
     public function run(): void
     {
+        $imagesPath = '/assets/images/icons/reactions/';
+        $fullPath = env('APP_URL') . env('BASE_STORAGE_PATH') . $imagesPath;
+
         DB::table('reactions')->insert([
             [
                 'id' => 1,
                 'name' => 'Сердце',
-                'url' => 'http://localhost:8000/storage/assets/images/icons/reactions/hearth.png',
+                'url' => $fullPath . 'hearth.png',
             ],
             [
                 'id' => 2,
                 'name' => 'Палец вверх',
-                'url' => 'http://localhost:8000/storage/assets/images/icons/reactions/thumb_up.png',
+                'url' => $fullPath . 'thumb_up.png',
             ],
             [
                 'id' => 3,
                 'name' => 'Палец вниз',
-                'url' => 'http://localhost:8000/storage/assets/images/icons/reactions/thumb_down.png',
+                'url' => $fullPath . 'thumb_down.png',
             ],
             [
                 'id' => 4,
                 'name' => 'Смех',
-                'url' => 'http://localhost:8000/storage/assets/images/icons/reactions/rofl.png',
+                'url' => $fullPath . 'rofl.png',
             ],
             [
                 'id' => 5,
                 'name' => 'Удивление',
-                'url' => 'http://localhost:8000/storage/assets/images/icons/reactions/wow.png',
+                'url' => $fullPath . 'wow.png',
             ],
         ]);
     }

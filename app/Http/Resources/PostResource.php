@@ -24,6 +24,7 @@ class PostResource extends JsonResource
             'content' => $this->content,
             'created_at' => $this->created_at,
             'reactions' => ReactionResource::collection(Reaction::withSetReactions($this->id, Post::class)->get()),
+            'images' => ImageResource::collection($this->images),
         ];
     }
 }

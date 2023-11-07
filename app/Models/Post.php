@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Http\FileManager;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -20,6 +21,37 @@ class Post extends Model
         return $this->reactions()->where('user_id', $user_id)->where('reaction_id', $reaction_id)->first();
     }
 
+    public function addImages($images, $userId, $communityId = false)
+    {
+        if ($communityId) $album = Album::where('is_primary', 1)->where('community_id', $communityId)->first();
+        else $album = Album::where('is_primary', 1)->where('user_id', $userId)->whereNull('community_id')->first();
+        foreach ($images as $image) {
+            $filename = FileManager::upload($image, FileManager::$postUploadPath);
+            $this->images()->create(['album_id' => $album->id, 'image' => $filename]);
+        }
+        return true;
+    }
+
+    /**
+     * Override methods
+     */
+
+    function delete()
+    {
+        // TODO: удаление комментариев (когда будут реализованы)
+
+        // Удаление изображений связанных с постом
+        foreach ($this->images as $image) {
+            FileManager::delete($image->image, FileManager::$postUploadPath);
+            $image->delete();
+        }
+
+        // Удаление реакций связанных с постом
+        $this->reactions()->delete();
+
+        parent::delete();
+    }
+
     /**
      * Model relationships
      */
@@ -35,16 +67,16 @@ class Post extends Model
 
     public function comments()
     {
-        return $this->morphMany('App\Models\Comment', 'commentable');
+        return $this->morphMany(Comment::class, 'commentable');
     }
 
     public function reactions()
     {
-        return $this->morphMany('App\Models\SetReaction', 'reactionable');
+        return $this->morphMany(SetReaction::class, 'reactionable');
     }
 
     public function images()
     {
-        return $this->morphMany('App\Models\Image', 'imageable');
+        return $this->morphMany(Image::class, 'imageable');
     }
 }

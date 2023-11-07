@@ -11,6 +11,7 @@ use App\Models\Community;
 use App\Models\Post;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class PostController extends Controller
 {
@@ -36,8 +37,19 @@ class PostController extends Controller
 
     public function store(StoreRequest $request)
     {
-        $post = Post::create($request->validated());
-        return ApiResponse::json(201, $post);
+        DB::beginTransaction();
+        try {
+            $post = Post::create($request->validated());
+            if ($request->images) {
+                $post->addImages($request->images, $request->user()->id, $request->community_id);
+            }
+            DB::commit();
+            return ApiResponse::json(201, new PostResource($post));
+
+        } catch (\Throwable $e) {
+            DB::rollBack();
+        }
+        return ApiResponse::error(500, "Что-то пошло не так...");
     }
 
     public function react(Post $post, ReactRequest $request)

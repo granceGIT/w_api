@@ -45,7 +45,6 @@ class User extends Authenticatable
         'api_token',
     ];
 
-    protected $imagesPath = '/uploads/avatars';
 
     public function setPasswordAttribute($value)
     {
@@ -54,7 +53,7 @@ class User extends Authenticatable
 
     public function getFullImagePath()
     {
-        return env('APP_URL') . env('BASE_STORAGE_PATH') . $this->imagesPath . '/' . $this->image;
+        return env('APP_URL') . env('BASE_STORAGE_PATH') . FileManager::$avatarsUploadPath . '/' . $this->image;
     }
 
     public function generateToken()
@@ -75,8 +74,8 @@ class User extends Authenticatable
 
     public function uploadImage($image)
     {
-        if ($this->image) return FileManager::update($this->image, $image, $this->imagesPath);
-        return FileManager::upload($image, $this->imagesPath);
+        if ($this->image) return FileManager::update($this->image, $image, FileManager::$avatarsUploadPath);
+        return FileManager::upload($image, FileManager::$avatarsUploadPath);
     }
 
     public function friendshipExists($user_id)
