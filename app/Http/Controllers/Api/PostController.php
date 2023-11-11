@@ -15,9 +15,10 @@ use Illuminate\Support\Facades\DB;
 
 class PostController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        return PostResource::collection(Post::orderBy('created_at', 'desc')->get());
+        $limit = $request->limit ?? Post::$defaultRowsPerPage;
+        return PostResource::collection(Post::orderByDesc('created_at')->simplePaginate($limit));
     }
 
     public function show(Post $post)
@@ -25,14 +26,16 @@ class PostController extends Controller
         return new PostResource($post);
     }
 
-    public function userPosts(User $user)
+    public function userPosts(User $user, Request $request)
     {
-        return PostResource::collection($user->posts()->orderBy('created_at', 'desc')->get());
+        $limit = $request->limit ?? Post::$defaultRowsPerPage;
+        return PostResource::collection($user->posts()->orderByDesc('created_at')->simplePaginate($limit));
     }
 
-    public function communityPosts(Community $community)
+    public function communityPosts(Community $community, Request $request)
     {
-        return PostResource::collection($community->posts);
+        $limit = $request->limit ?? Post::$defaultRowsPerPage;
+        return PostResource::collection($community->posts()->orderByDesc('created_at')->simplePaginate($limit));
     }
 
     public function store(StoreRequest $request)

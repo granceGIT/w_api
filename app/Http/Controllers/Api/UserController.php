@@ -52,7 +52,7 @@ class UserController extends Controller
         return new UserResource($request->user());
     }
 
-    public function find(User $user)
+    public function show(User $user)
     {
         return new UserResource($user);
     }

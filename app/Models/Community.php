@@ -9,6 +9,8 @@ class Community extends Model
 {
     use HasFactory;
 
+    public static int $defaultRowsPerPage = 5;
+
     protected $fillable = [
         'user_id',
         'type_id',
