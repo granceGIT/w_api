@@ -17,7 +17,6 @@ class DatabaseSeeder extends Seeder
             CommunityTypeSeeder::class,
             FriendshipStatusSeeder::class,
             ReactionSeeder::class,
-            SubscriptionStatusSeeder::class,
         ]);
     }
 }
