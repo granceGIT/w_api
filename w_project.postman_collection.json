@@ -1,0 +1,803 @@
+{
+	"info": {
+		"_postman_id": "0f752a06-efd8-4fca-87c0-237da7d29755",
+		"name": "w_project",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "25769678"
+	},
+	"item": [
+		{
+			"name": "User",
+			"item": [
+				{
+					"name": "login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.environment.set(\"user_auth\", pm.response.json().data.token);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"login\":\"login\",\n    \"password\":\"password\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/{{api_route}}/login",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"{{api_route}}",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "register",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"login\":\"login\",\n    \"name\":\"name\",\n    \"surname\":\"surname\",\n    \"password\":\"password\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/{{api_route}}/register",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"{{api_route}}",
+								"register"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "profile",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{user_auth}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "{{host}}/{{api_route}}/profile",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"{{api_route}}",
+								"profile"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "search",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "5|bXyhmwKbGe67vJFmeJczuVscnM3XZ2qdkYu8z2gf1770acbd",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "{{host}}/{{api_route}}/users?search=asd",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"{{api_route}}",
+								"users"
+							],
+							"query": [
+								{
+									"key": "search",
+									"value": "asd"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "show",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{user_auth}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"url": {
+							"raw": "{{host}}/{{api_route}}/users/5",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"{{api_route}}",
+								"users",
+								"5"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{user_auth}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "name",
+									"value": "Левон",
+									"type": "text"
+								},
+								{
+									"key": "surname",
+									"value": "Акопян",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "123456",
+									"type": "text"
+								},
+								{
+									"key": "image",
+									"type": "file",
+									"src": "/home/levon/Pictures/tar_archive_programm_setup.png"
+								},
+								{
+									"key": "_method",
+									"value": "PUT",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{host}}/{{api_route}}/profile",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"{{api_route}}",
+								"profile"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "logout",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{user_auth}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/{{api_route}}/logout",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"{{api_route}}",
+								"logout"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Post",
+			"item": [
+				{
+					"name": "index",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {
+							"user-agent": true,
+							"accept": true,
+							"accept-encoding": true,
+							"connection": true
+						}
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer 6|5WoBBHmKsNp9hpDqh8Tf3IetYDv4InrPfo4FQ6Yp682a5761",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/{{api_route}}/posts?page=1",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"{{api_route}}",
+								"posts"
+							],
+							"query": [
+								{
+									"key": "page",
+									"value": "1"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "myPostReactions",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {
+							"user-agent": true,
+							"accept": true,
+							"accept-encoding": true,
+							"connection": true
+						}
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{user_auth}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer 6|5WoBBHmKsNp9hpDqh8Tf3IetYDv4InrPfo4FQ6Yp682a5761",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/{{api_route}}/myPostReactions",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"{{api_route}}",
+								"myPostReactions"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "myFriendsPosts",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {
+							"user-agent": true,
+							"accept": true,
+							"accept-encoding": true,
+							"connection": true
+						}
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{user_auth}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer 6|5WoBBHmKsNp9hpDqh8Tf3IetYDv4InrPfo4FQ6Yp682a5761",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/{{api_route}}/myFriendsPosts",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"{{api_route}}",
+								"myFriendsPosts"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "mySubscribedCommunitiesPosts",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {
+							"user-agent": true,
+							"accept": true,
+							"accept-encoding": true,
+							"connection": true
+						}
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{user_auth}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer 6|5WoBBHmKsNp9hpDqh8Tf3IetYDv4InrPfo4FQ6Yp682a5761",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/{{api_route}}/mySubscribedPosts",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"{{api_route}}",
+								"mySubscribedPosts"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "userPosts",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "5|bXyhmwKbGe67vJFmeJczuVscnM3XZ2qdkYu8z2gf1770acbd",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/{{api_route}}/users/5/posts",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"{{api_route}}",
+								"users",
+								"5",
+								"posts"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "react",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{user_auth}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"reaction_id\":3\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/{{api_route}}/posts/1/react",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"{{api_route}}",
+								"posts",
+								"1",
+								"react"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "create",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{user_auth}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/{{api_route}}/posts",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"{{api_route}}",
+								"posts"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "destroy",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{user_auth}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/{{api_route}}/posts/6",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"{{api_route}}",
+								"posts",
+								"6"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "show",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/{{api_route}}/posts/40",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"{{api_route}}",
+								"posts",
+								"40"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Community",
+			"item": [
+				{
+					"name": "index",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {
+							"user-agent": true,
+							"accept": true,
+							"accept-encoding": true,
+							"connection": true
+						}
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer 6|5WoBBHmKsNp9hpDqh8Tf3IetYDv4InrPfo4FQ6Yp682a5761",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/{{api_route}}/communities/",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"{{api_route}}",
+								"communities",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "show",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {
+							"user-agent": true,
+							"accept": true,
+							"accept-encoding": true,
+							"connection": true
+						}
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{user_auth}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer 6|5WoBBHmKsNp9hpDqh8Tf3IetYDv4InrPfo4FQ6Yp682a5761",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{host}}/{{api_route}}/communities/1",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"{{api_route}}",
+								"communities",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "create",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{user_auth}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "name",
+									"value": "Второе сообщество",
+									"type": "text"
+								},
+								{
+									"key": "image",
+									"type": "file",
+									"src": "/home/levon/Pictures/345.png"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{host}}/{{api_route}}/communities/",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"{{api_route}}",
+								"communities",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{user_auth}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"alias\":\"legend_17\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{host}}/{{api_route}}/communities/2",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"{{api_route}}",
+								"communities",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "destroy",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{user_auth}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{host}}/{{api_route}}/posts/6",
+							"host": [
+								"{{host}}"
+							],
+							"path": [
+								"{{api_route}}",
+								"posts",
+								"6"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
