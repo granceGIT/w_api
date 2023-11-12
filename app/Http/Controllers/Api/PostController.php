@@ -29,7 +29,28 @@ class PostController extends Controller
     public function userPosts(User $user, Request $request)
     {
         $limit = $request->limit ?? Post::$defaultRowsPerPage;
-        return PostResource::collection($user->posts()->orderByDesc('created_at')->simplePaginate($limit));
+        return PostResource::collection($user->posts()->whereNull('community_id')->orderByDesc('created_at')->simplePaginate($limit));
+    }
+
+    public function userReactions(Request $request)
+    {
+        $user = $request->user();
+        $limit = $request->limit ?? Post::$defaultRowsPerPage;
+        return PostResource::collection($user->reactedPosts()->simplePaginate($limit));
+    }
+
+    public function friendsPosts(Request $request)
+    {
+        $user = $request->user();
+        $limit = $request->limit ?? Post::$defaultRowsPerPage;
+        return PostResource::collection($user->friendsPosts()->simplePaginate($limit));
+    }
+
+    public function userSubscribedCommunitiesPosts(Request $request)
+    {
+        $user = $request->user();
+        $limit = $request->limit ?? Post::$defaultRowsPerPage;
+        return PostResource::collection($user->subscribedCommunitiesPosts()->simplePaginate($limit));
     }
 
     public function communityPosts(Community $community, Request $request)

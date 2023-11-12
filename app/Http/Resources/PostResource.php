@@ -19,8 +19,7 @@ class PostResource extends JsonResource
         return [
             'id' => $this->id,
             'user' => new UserResource($this->user),
-            'community_id' => $this->whenNotNull($this->community_id),
-            'community' => $this->whenHas('community'),
+            'community' => $this->when($this->community_id, new CommunityResource($this->community)),
             'content' => $this->content,
             'created_at' => $this->created_at,
             'reactions' => ReactionResource::collection(Reaction::withSetReactions($this->id, Post::class)->get()),

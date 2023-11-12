@@ -14,10 +14,18 @@ class CommunityResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
+        $user = auth('sanctum')->user();
         return [
             'id' => $this->id,
             'name' => $this->name,
-            'image' => $this->image,
+            'user_id' => $this->user_id,
+            'contributors' => CommunityEditorResource::collection($this->editors),
+            'description' => $this->whenNotNull($this->description),
+            'alias' => $this->whenNotNull($this->alias),
+            'image' => $this->image ? $this->getFullImagePath() : $this->image,
+            'sub_count' => $this->subscribers->count(),
+            'subscribed' => $user?->isSubscribedToCommunity($this->id),
+            'created_at' => $this->created_at,
         ];
     }
 }

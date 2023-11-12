@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Http\FileManager;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -17,7 +18,13 @@ class Community extends Model
         'name',
         'description',
         'alias',
+        'image',
     ];
+
+    public function getFullImagePath()
+    {
+        return env('APP_URL') . env('BASE_STORAGE_PATH') . FileManager::$communityAvatarsUploadPath . '/' . $this->image;
+    }
 
     /**
      * Model relationships
@@ -42,8 +49,13 @@ class Community extends Model
         return $this->hasMany(Album::class);
     }
 
+    public function editors()
+    {
+        return $this->hasMany(CommunityEditor::class);
+    }
+
     public function subscribers()
     {
-        return $this->belongsToMany(User::class)->withPivot('subscription_status_id', 'message');
+        return $this->belongsToMany(User::class, 'subscriptions')->withPivot('message');
     }
 }

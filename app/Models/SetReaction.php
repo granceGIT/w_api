@@ -14,8 +14,6 @@ class SetReaction extends Model
         'reaction_id',
     ];
 
-    public $timestamps = false;
-
     /**
      * Model relationships
      */

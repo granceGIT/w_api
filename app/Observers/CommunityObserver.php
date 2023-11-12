@@ -4,6 +4,7 @@ namespace App\Observers;
 
 use App\Models\Album;
 use App\Models\Community;
+use App\Models\CommunityEditor;
 
 class CommunityObserver
 {
@@ -16,5 +17,6 @@ class CommunityObserver
     public function created(Community $community): void
     {
         Album::create(['name' => 'Основной', 'is_primary' => 1, 'user_id' => $community->user_id, 'community_id' => $community->id]);
+        CommunityEditor::create(['user_id' => $community->user_id, 'community_id' => $community->id, 'role' => 'Создатель']);
     }
 }

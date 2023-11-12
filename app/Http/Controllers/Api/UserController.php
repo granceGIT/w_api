@@ -62,7 +62,7 @@ class UserController extends Controller
         $user = $request->user();
         if (Hash::check($request->password, $user->password)) {
             $validated = $request->validated();
-            if ($request->image) $validated['image'] = $user->uploadImage($request->image);
+            if ($request->image) $validated['image'] = FileManager::update($user->image, $request->image, FileManager::$userAvatarsUploadPath);
             if ($request->new_password) $validated['password'] = $request->new_password;
             $user->update($validated);
             return new UserResource($user);

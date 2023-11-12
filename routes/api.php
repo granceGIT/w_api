@@ -19,12 +19,9 @@ Route::controller(\App\Http\Controllers\Api\PostController::class)->group(functi
     Route::get('/communities/{community}/posts', 'communityPosts');
 });
 
-Route::controller(\App\Http\Controllers\Api\PostController::class)->group(function () {
+Route::controller(\App\Http\Controllers\Api\CommunityController::class)->group(function () {
     Route::get('/communities', 'index');
     Route::get('/communities/{community}', 'show');
-    Route::post('/communities/{community}', 'store');
-    Route::put('/communities/{community}', 'update');
-    Route::delete('/communities/{community}', 'destroy');
 });
 
 Route::middleware('auth:sanctum')->group(function () {
@@ -38,8 +35,21 @@ Route::middleware('auth:sanctum')->group(function () {
 
     Route::controller(\App\Http\Controllers\Api\PostController::class)->group(function () {
         Route::post('/posts', 'store');
+        Route::get('/myPostReactions', 'userReactions');
+        Route::get('/myFriendsPosts', 'friendsPosts');
+        Route::get('/mySubscribedPosts', 'userSubscribedCommunitiesPosts');
+
 
         Route::delete('/posts/{post}', 'destroy');
         Route::post('/posts/{post}/react', 'react');
+    });
+
+    Route::controller(\App\Http\Controllers\Api\CommunityController::class)->group(function () {
+        Route::post('/communities', 'store');
+        Route::put('/communities/{community}', 'update');
+        Route::delete('/communities/{community}', 'destroy');
+
+        Route::get('/communities/{community}/subscribe', 'subscribe');
+        Route::get('/communities/{community}/unsubscribe', 'unsubscribe');
     });
 });

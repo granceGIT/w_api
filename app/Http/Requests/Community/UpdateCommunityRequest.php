@@ -2,27 +2,24 @@
 
 namespace App\Http\Requests\Community;
 
+use App\Models\Community;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class UpdateCommunityRequest extends FormRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     */
-    public function authorize(): bool
+    public function authorize()
     {
-        return false;
+        return $this->user()->id === $this->community->user_id;
     }
 
-    /**
-     * Get the validation rules that apply to the request.
-     *
-     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
-     */
     public function rules(): array
     {
         return [
-            //
+            'name' => ['sometimes', 'string'],
+            'description' => ['sometimes', 'string'],
+            'alias' => ['sometimes', 'string', Rule::unique('communities', 'alias')->ignore($this->community)],
+            'image' => ['sometimes', 'mimes:jpg,jpeg,png,bmp,webp', 'max:20000'],
         ];
     }
 }

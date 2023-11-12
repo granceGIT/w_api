@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use App\Http\FileManager;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -53,7 +52,7 @@ class User extends Authenticatable
 
     public function getFullImagePath()
     {
-        return env('APP_URL') . env('BASE_STORAGE_PATH') . FileManager::$avatarsUploadPath . '/' . $this->image;
+        return env('APP_URL') . env('BASE_STORAGE_PATH') . FileManager::$userAvatarsUploadPath . '/' . $this->image;
     }
 
     public function generateToken()
@@ -72,21 +71,49 @@ class User extends Authenticatable
         }
     }
 
-    public function uploadImage($image)
-    {
-        if ($this->image) return FileManager::update($this->image, $image, FileManager::$avatarsUploadPath);
-        return FileManager::upload($image, FileManager::$avatarsUploadPath);
-    }
-
     public function friendshipExists($user_id)
     {
         $user = $this;
+        // пользователь может быть как в качестве отправителя заявки, так и в качестве получателя. Проверяем оба случая
         return Friendship::where(function ($query) use ($user_id, $user) {
             $query->where('sender_id', $user->id)->where('recipient_id', $user_id);
         })->orWhere(function ($query) use ($user_id, $user) {
             $query->where('sender_id', $user_id)->where('recipient_id', $user->id);
         })->first();
     }
+
+    public function isSubscribedToCommunity($id)
+    {
+        return !!$this->subscriptions()->where('community_id', $id)->first();
+    }
+
+    public function reactedPosts()
+    {
+        // TODO: переделать в raw запрос с правильной сортировкой по дате установки реакции
+        $reactedPostIds = $this->reactions()->select('reactionable_id')->where('reactionable_type', Post::class)->distinct();
+        return Post::whereIn('id', $reactedPostIds)->orderByDesc('id');
+    }
+
+    public function friendsPosts()
+    {
+        $friendPostIds = $this->friends()->select('id');
+        return Post::whereIn('user_id', $friendPostIds)->orderByDesc('id');
+    }
+
+    public function subscribedCommunitiesPosts()
+    {
+        $subscribedCommunitiesPostIds = $this->subscriptions()->select('community_id');
+        return Post::whereIn('community_id', $subscribedCommunitiesPostIds)->orderByDesc('id');
+    }
+
+    public function friends()
+    {
+        $senderIds = Friendship::where('recipient_id', $this->id)->where('friendship_status_id', 2)->select('sender_id');
+        $recipientIds = Friendship::where('sender_id', $this->id)->where('friendship_status_id', 2)->select('recipient_id')->union($senderIds);
+
+        return User::whereIn('id', $recipientIds);
+    }
+
 
     /**
      * Model relationships
@@ -121,8 +148,9 @@ class User extends Authenticatable
         return $this->hasMany(Album::class);
     }
 
+
     public function subscriptions()
     {
-        return $this->belongsToMany(Community::class)->withPivot('subscription_status_id', 'message');
+        return $this->belongsToMany(Community::class, 'subscriptions')->withPivot('message');
     }
 }

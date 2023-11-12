@@ -8,7 +8,8 @@ use Illuminate\Support\Facades\Storage;
 class FileManager
 {
     static string $postUploadPath = '/uploads/posts';
-    static string $avatarsUploadPath = '/uploads/avatars';
+    static string $userAvatarsUploadPath = '/uploads/users/avatars';
+    static string $communityAvatarsUploadPath = '/uploads/communities/avatars';
     static string $commentsUploadPath = '/uploads/comments';
     static string $defaultUploadPath = '/uploads';
 
